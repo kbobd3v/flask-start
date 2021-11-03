@@ -1,0 +1,36 @@
+<!--extends brings the elements we need from some html file to use it without repeat code-->
+<!--important! 'extends' calls a template and this template takes control of your whole view-->
+{% extends 'base.html' %}
+<!--Import the macros you've created, remember, macros are used as literal code fragments  -->
+{% import 'macros.html' as macros %}
+<!--Now we can override the content of the blocks we inherited from base.html-->
+<!--Also can use the inherited content and use our own content at the same time using super()-->
+{% block title %}
+    {{ super() }}
+    Buenas!
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    <!--You can use python control structures within html with { % data % }-->
+    {% if user_ip %}
+        <p> Hello user, we noticed you're visiting us from the IP: {{ user_ip }}</p>
+    {% else %}
+        <!-- if there's no cookie created the user will be redirected to our index function and route   -->
+        <!--Here we use the url_for command to send html to the flask route we want, only by using the name of the function within the route-->
+        <a href="{{ url_for('index') }}"> Go to home</a>
+        <!--Remember use the endif to finish the execution block-->
+    {% endif %}
+
+    <!--In order to show the elements of our 'todos' variable, we can use control structures
+        like for loops and if statements, once we pass the params like dictionaries or
+        plane variables to our render_template function besides the html file -->
+    <ul>
+        <!-- Remember { { this structure for variables } } -->
+        <!-- And this { % this to control structures % }   -->
+        <!--        -->
+        {% for todo in todos %}
+            {{ macros.render_todo(todo) }}
+        {% endfor %}
+    </ul>
+{% endblock %}
